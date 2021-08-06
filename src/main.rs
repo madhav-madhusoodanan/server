@@ -15,7 +15,15 @@ fn main() {
         let mut buffer = [0; 1024];
         stream.read(&mut buffer).unwrap();
 
-	let contents = fs::read_to_string("rust.html").unwrap();
+	    let get = b"GET / HTTP/1.1\r\n";
+	    let file: &str;
+	    if buffer.starts_with(get) {
+		file = "rust.html";
+	    } else {
+		file = "err.html";
+	    };
+
+	let contents = fs::read_to_string(file).unwrap();
 	let response = format!(
 				"HTTP/1.1 200 OK\r\nContent-Length: {}\r\n\r\n{}", 
 				contents.len(),
